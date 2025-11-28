@@ -160,7 +160,7 @@ export function Hero() {
           className="flex items-center justify-center gap-4 mb-8"
         >
           <a
-            href="https://github.com/shankranand"
+            href="https://github.com/Sruwat"
             target="_blank"
             rel="noopener noreferrer"
             className="p-4 bg-slate-800/50 backdrop-blur-sm rounded-full hover:bg-slate-700/50 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/50 group"
@@ -168,7 +168,7 @@ export function Hero() {
             <Github className="w-7 h-7 group-hover:rotate-12 transition-transform duration-300" />
           </a>
           <a
-            href="https://www.linkedin.com/in/shankranand-sarswati"
+            href="https://www.linkedin.com/in/shankranand-sarswati-53b65622b"
             target="_blank"
             rel="noopener noreferrer"
             className="p-4 bg-slate-800/50 backdrop-blur-sm rounded-full hover:bg-slate-700/50 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/50 group"

@@ -63,23 +63,26 @@ export function About() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-          {/* Professional Photo - Smaller Animated Square */}
+          {/* Professional Photo - 300x300px Square */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative group justify-self-center flex items-center"
           >
-            <div className="absolute -left-2 -top-2 w-28 h-28 rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
+            <div className="absolute -left-3 -top-3 w-[324px] h-[324px] rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
             <motion.div
-              whileHover={{ scale: 1.04, rotate: 1 }}
-              transition={{ type: 'spring', stiffness: 240, damping: 24 }}
-              className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-purple-500/50 group-hover:border-purple-500/80 shadow-lg transition-all duration-400"
+              whileHover={{ scale: 1.05, rotate: 2 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              className="relative rounded-2xl overflow-hidden border-2 border-purple-500/50 group-hover:border-purple-500/80 shadow-2xl transition-all duration-500 flex-shrink-0"
+              style={{ width: 300, height: 300, minWidth: 300, minHeight: 300 }}
             >
               <img
                 src={professionalPhoto}
                 alt="Shankranand Sarswati"
-                className="w-full h-full object-cover object-top"
+                width={300}
+                height={300}
+                className="object-cover object-top w-full h-full"
                 style={{ objectPosition: '50% 20%' }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

@@ -43,19 +43,19 @@ export function Contact() {
     {
       icon: Github,
       label: 'GitHub',
-      url: 'https://github.com/shankranand',
-      username: '@shankranand',
+      url: 'https://github.com/Sruwat',
+      username: '@Sruwat',
     },
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      url: 'https://www.linkedin.com/in/shankranand-sarswati',
+      url: 'https://www.linkedin.com/in/shankranand-sarswati-53b65622b',
       username: 'shankranand-sarswati',
     },
     {
       icon: ExternalLink,
       label: 'Portfolio',
-      url: 'https://sriswati.github.io/portfoliowebsite/',
+      url: 'https://advance-portfolio-phi.vercel.app/',
       username: 'Portfolio Website',
     },
   ];

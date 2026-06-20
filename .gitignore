@@ -1,2 +1,6 @@
 node_modules
 .env
+build/
+vite-dev*.log
+assets/**/*.mp4
+public/**/*.mp4

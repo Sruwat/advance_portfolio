@@ -1488,51 +1488,67 @@ function PersonalProjectDetailPage({ project }: { project: ResearchProject }) {
 }
 
 function ContactForm() {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    company: '',
-    need: 'Enterprise AI system',
-    message: '',
-  });
+  const formRef = useRef<HTMLFormElement>(null);
+  const [contactStatus, setContactStatus] = useState<'idle' | 'sending' | 'sent' | 'fallback'>('idle');
 
-  const updateField = (field: keyof typeof form, value: string) => {
-    setForm((current) => ({ ...current, [field]: value }));
-  };
-
-  const submitContact = (event: FormEvent<HTMLFormElement>) => {
+  const submitContact = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const body = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      `Company: ${form.company || 'Not provided'}`,
-      `Need: ${form.need}`,
-      '',
-      form.message,
-    ].join('\n');
-    window.location.href = `mailto:shankranand332@gmail.com?subject=${encodeURIComponent(`Portfolio inquiry: ${form.need}`)}&body=${encodeURIComponent(body)}`;
+    const formElement = event.currentTarget;
+    const formData = new FormData(formElement);
+    const payload = Object.fromEntries(formData.entries());
+
+    setContactStatus('sending');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Primary email service failed.');
+      }
+
+      setContactStatus('sent');
+      formElement.reset();
+    } catch {
+      setContactStatus('fallback');
+      window.setTimeout(() => {
+        formRef.current?.submit();
+      }, 650);
+    }
   };
 
   return (
-    <form className="contact-form" onSubmit={submitContact}>
+    <form ref={formRef} className="contact-form" action="https://formsubmit.co/shankranand332@gmail.com" method="POST" onSubmit={submitContact}>
+      <input type="hidden" name="_subject" value="New Portfolio Inquiry" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_template" value="table" />
       <div className="form-row">
         <label>
           Name
-          <input value={form.name} onChange={(event) => updateField('name', event.target.value)} required />
+          <input name="name" required />
         </label>
         <label>
           Email
-          <input type="email" value={form.email} onChange={(event) => updateField('email', event.target.value)} required />
+          <input type="email" name="email" required />
         </label>
       </div>
       <div className="form-row">
         <label>
-          Company
-          <input value={form.company} onChange={(event) => updateField('company', event.target.value)} />
+          Phone
+          <input name="phone" type="tel" />
         </label>
         <label>
-          Need
-          <select value={form.need} onChange={(event) => updateField('need', event.target.value)}>
+          Company
+          <input name="company" />
+        </label>
+      </div>
+      <div className="form-row">
+        <label>
+          Service
+          <select name="service" defaultValue="Enterprise AI system">
             <option>Enterprise AI system</option>
             <option>RAG / Document Intelligence</option>
             <option>SaaS product build</option>
@@ -1544,15 +1560,18 @@ function ContactForm() {
       <label>
         Message
         <textarea
-          value={form.message}
-          onChange={(event) => updateField('message', event.target.value)}
+          name="message"
           rows={4}
           placeholder="Tell me what you want to build or discuss."
           required
         />
       </label>
-      <button type="submit">Send inquiry by email</button>
-      <small>Submits through your email client to shankranand332@gmail.com. A backend email service can be connected later for silent delivery.</small>
+      <button type="submit" disabled={contactStatus === 'sending' || contactStatus === 'fallback'}>
+        {contactStatus === 'sending' ? 'Sending...' : 'Send inquiry'}
+      </button>
+      {contactStatus === 'sent' && <small className="form-status sent">Message sent successfully.</small>}
+      {contactStatus === 'fallback' && <small className="form-status fallback">Email service unavailable, opening secure fallback submission.</small>}
+      <small>Primary delivery uses the private portfolio email service. If unavailable, the same inquiry securely falls back to FormSubmit.</small>
     </form>
   );
 }

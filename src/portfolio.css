@@ -1526,11 +1526,13 @@ body {
   line-height: 1.45;
 }
 
-.hrms-demo-player video {
+.hrms-demo-player video,
+.hrms-demo-player iframe {
   display: block;
   width: 100%;
   max-height: min(66vh, 620px);
   aspect-ratio: 16 / 9;
+  border: 0;
   object-fit: contain;
   background: #050014;
 }

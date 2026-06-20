@@ -42,6 +42,27 @@ import {
 
 const heroBadges = ['Agentic AI', 'RAG Systems', 'SaaS Products', 'LangGraph', 'Qdrant', 'AWS'];
 const orbitNodes = ['HRMS', 'ERP', 'CRM', 'Document Intelligence', 'Voice Bot', 'RAG Chatbot', 'MSME Guard', 'GST Guard Shield'];
+
+function toYouTubeEmbedUrl(rawUrl?: string) {
+  if (!rawUrl) return '';
+
+  try {
+    const url = new URL(rawUrl);
+    if (url.hostname.includes('youtube.com') && url.pathname.startsWith('/embed/')) return rawUrl;
+
+    const videoId = url.hostname.includes('youtu.be')
+      ? url.pathname.replace('/', '')
+      : url.pathname.startsWith('/shorts/')
+        ? url.pathname.split('/')[2]
+        : url.searchParams.get('v');
+
+    if (!videoId) return '';
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&rel=0`;
+  } catch {
+    return '';
+  }
+}
+
 const hrmsScreenshots = [
   { label: 'employee_dashboard', title: 'Employee Dashboard', src: hrmsEmployeeDashboard },
   { label: 'hr_dashboard', title: 'HR Dashboard', src: hrmsHrDashboard },
@@ -53,8 +74,11 @@ const hrmsScreenshots = [
   { label: 'business_insight', title: 'Business Insight', src: hrmsBusinessInsight },
 ];
 const hrmsDemoAssets = [
-  { label: 'Part 1', src: '/videos/hrms/hrms-demo-part1.mp4' },
-  { label: 'Part 2', src: '/videos/hrms/hrms-demo-part2.mp4' },
+  {
+    label: 'HRMS Demo',
+    src: '/videos/hrms/hrms-demo.mp4',
+    embedUrl: toYouTubeEmbedUrl((import.meta as any).env?.VITE_HRMS_DEMO_YOUTUBE_URL),
+  },
 ];
 const erpScreenshots = [
   { label: 'erp_main_screen', title: 'ERP Main Screen', src: erpMainScreen },
@@ -64,7 +88,11 @@ const erpScreenshots = [
   { label: 'operations_overview', title: 'Operations Overview', src: erpOverview },
 ];
 const erpDemoAssets = [
-  { label: 'ERP Demo', src: '/videos/erp/erp-demo.mp4' },
+  {
+    label: 'ERP Demo',
+    src: '/videos/erp/erp-demo.mp4',
+    embedUrl: toYouTubeEmbedUrl((import.meta as any).env?.VITE_ERP_DEMO_YOUTUBE_URL),
+  },
 ];
 const skillBars = [
   { name: 'AI Engineering', value: 96, group: 'Core AI' },
@@ -635,13 +663,15 @@ function ProductDemoPlayer({
 }: {
   title: string;
   subtitle: string;
-  assets: Array<{ label: string; src: string }>;
+  assets: Array<{ label: string; src: string; embedUrl?: string }>;
 }) {
   const [activeVideo, setActiveVideo] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const video = assets[activeVideo];
+  const hasMultipleVideos = assets.length > 1;
 
   useEffect(() => {
+    if (video.embedUrl) return;
     const player = videoRef.current;
     if (!player) return;
 
@@ -657,37 +687,51 @@ function ProductDemoPlayer({
         <span>Autoplay Demo</span>
         <strong>{title}</strong>
         <small>
-          {subtitle} Playing {video.label} of {assets.length}. The demo automatically continues and loops.
+          {subtitle} {video.embedUrl ? 'Playing as an embedded unlisted YouTube demo.' : 'Playing as a single product walkthrough.'}
         </small>
       </div>
-      <video
-        ref={videoRef}
-        key={video.src}
-        src={video.src}
-        autoPlay
-        muted
-        playsInline
-        controls
-        preload="metadata"
-        onLoadedData={(event) => {
-          event.currentTarget.muted = true;
-          event.currentTarget.play().catch(() => undefined);
-        }}
-        onEnded={() => setActiveVideo((index) => (index + 1) % assets.length)}
-      />
-      <div className="hrms-demo-progress">
-        {assets.map((item, index) => (
-          <button
-            type="button"
-            className={index === activeVideo ? 'active' : ''}
-            key={item.src}
-            onClick={() => setActiveVideo(index)}
-            aria-label={`Play ${item.label}`}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
+      {video.embedUrl ? (
+        <iframe
+          title={title}
+          src={video.embedUrl}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          key={video.src}
+          src={video.src}
+          autoPlay
+          loop={!hasMultipleVideos}
+          muted
+          playsInline
+          controls
+          preload="metadata"
+          onLoadedData={(event) => {
+            event.currentTarget.muted = true;
+            event.currentTarget.play().catch(() => undefined);
+          }}
+          onEnded={() => {
+            if (hasMultipleVideos) setActiveVideo((index) => (index + 1) % assets.length);
+          }}
+        />
+      )}
+      {hasMultipleVideos && (
+        <div className="hrms-demo-progress">
+          {assets.map((item, index) => (
+            <button
+              type="button"
+              className={index === activeVideo ? 'active' : ''}
+              key={item.src}
+              onClick={() => setActiveVideo(index)}
+              aria-label={`Play ${item.label}`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

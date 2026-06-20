@@ -1,1 +1,1 @@
-Place real Aiwana ERP recordings here. Replace placeholder paths in project data after adding assets.
+Use one file: `erp-demo.mp4`. For production, set `VITE_ERP_DEMO_YOUTUBE_URL` to an unlisted YouTube link.

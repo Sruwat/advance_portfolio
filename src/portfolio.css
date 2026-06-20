@@ -1537,6 +1537,65 @@ body {
   background: #050014;
 }
 
+.hrms-demo-skeleton {
+  position: relative;
+  display: grid;
+  min-height: clamp(240px, 46vw, 560px);
+  place-items: center;
+  overflow: hidden;
+  text-align: center;
+  border-top: 1px solid rgba(216,180,254,0.12);
+  background:
+    radial-gradient(circle at 50% 40%, rgba(168,85,247,0.24), transparent 36%),
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+    #050014;
+}
+
+.hrms-demo-skeleton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.09) 44%, transparent 68%);
+  transform: translateX(-100%);
+  animation: demo-shimmer 1.8s ease-in-out infinite;
+}
+
+.hrms-demo-skeleton span {
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  border: 1px solid rgba(216,180,254,0.32);
+  background: radial-gradient(circle, rgba(192,132,252,0.85), rgba(139,92,246,0.18) 62%, transparent 63%);
+  box-shadow: 0 0 40px rgba(168,85,247,0.35);
+}
+
+.hrms-demo-skeleton strong,
+.hrms-demo-skeleton small {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.hrms-demo-skeleton strong {
+  margin-top: -34px;
+  color: #f8fafc;
+  font-size: clamp(20px, 3vw, 28px);
+}
+
+.hrms-demo-skeleton small {
+  max-width: 420px;
+  margin-top: -38px;
+  padding: 0 18px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+@keyframes demo-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
 .hrms-demo-progress {
   display: flex;
   flex-wrap: wrap;

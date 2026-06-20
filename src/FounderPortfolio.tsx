@@ -57,7 +57,7 @@ function toYouTubeEmbedUrl(rawUrl?: string) {
         : url.searchParams.get('v');
 
     if (!videoId) return '';
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&rel=0`;
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&rel=0&playsinline=1`;
   } catch {
     return '';
   }
@@ -666,12 +666,32 @@ function ProductDemoPlayer({
   assets: Array<{ label: string; src: string; embedUrl?: string }>;
 }) {
   const [activeVideo, setActiveVideo] = useState(0);
+  const [shouldLoadPlayer, setShouldLoadPlayer] = useState(false);
+  const shellRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const video = assets[activeVideo];
   const hasMultipleVideos = assets.length > 1;
 
   useEffect(() => {
-    if (video.embedUrl) return;
+    const shell = shellRef.current;
+    if (!shell) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadPlayer(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '320px 0px' },
+    );
+
+    observer.observe(shell);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadPlayer || video.embedUrl) return;
     const player = videoRef.current;
     if (!player) return;
 
@@ -679,10 +699,10 @@ function ProductDemoPlayer({
     player.play().catch(() => {
       // Browsers can delay autoplay until metadata is ready; onLoadedData retries.
     });
-  }, [activeVideo]);
+  }, [activeVideo, shouldLoadPlayer, video.embedUrl]);
 
   return (
-    <div className="hrms-demo-player" aria-label={`${title} autoplay demo`}>
+    <div className="hrms-demo-player" ref={shellRef} aria-label={`${title} autoplay demo`}>
       <div className="hrms-demo-copy">
         <span>Autoplay Demo</span>
         <strong>{title}</strong>
@@ -690,11 +710,18 @@ function ProductDemoPlayer({
           {subtitle} {video.embedUrl ? 'Playing as an embedded unlisted YouTube demo.' : 'Playing as a single product walkthrough.'}
         </small>
       </div>
-      {video.embedUrl ? (
+      {!shouldLoadPlayer ? (
+        <div className="hrms-demo-skeleton" role="status" aria-live="polite">
+          <span />
+          <strong>Preparing product demo</strong>
+          <small>The video loads when this section enters view to keep the portfolio smooth.</small>
+        </div>
+      ) : video.embedUrl ? (
         <iframe
           title={title}
           src={video.embedUrl}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          loading="lazy"
           allowFullScreen
         />
       ) : (

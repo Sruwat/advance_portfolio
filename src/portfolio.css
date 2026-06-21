@@ -16,11 +16,34 @@ body {
     linear-gradient(rgba(192, 132, 252, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(192, 132, 252, 0.03) 1px, transparent 1px),
     radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08) 1px, transparent 1.6px),
+    linear-gradient(135deg, rgba(5, 0, 20, 0.9), rgba(46, 16, 101, 0.68) 42%, rgba(5, 0, 20, 0.92)),
     radial-gradient(circle at 12% 6%, rgba(168, 85, 247, 0.28), transparent 32%),
     radial-gradient(circle at 86% 14%, rgba(124, 58, 237, 0.26), transparent 34%),
     radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.035), transparent 44%),
-    linear-gradient(135deg, #050014, #08001f 48%, #050014);
-  background-size: 54px 54px, 54px 54px, 18px 18px, auto, auto, auto, auto;
+    linear-gradient(135deg, rgba(5, 0, 20, 0.72), rgba(8, 0, 31, 0.76) 48%, rgba(5, 0, 20, 0.86)),
+    url('../assets/Background.png');
+  background-position:
+    center,
+    center,
+    center,
+    center,
+    center,
+    center,
+    center,
+    center,
+    center;
+  background-size:
+    54px 54px,
+    54px 54px,
+    18px 18px,
+    cover,
+    auto,
+    auto,
+    auto,
+    cover,
+    cover;
+  background-repeat: repeat, repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed;
 }
 
 .cursor-spotlight {

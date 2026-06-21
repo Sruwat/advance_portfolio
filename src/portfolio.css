@@ -16,11 +16,11 @@ body {
     linear-gradient(rgba(192, 132, 252, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(192, 132, 252, 0.03) 1px, transparent 1px),
     radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08) 1px, transparent 1.6px),
-    linear-gradient(135deg, rgba(5, 0, 20, 0.9), rgba(46, 16, 101, 0.68) 42%, rgba(5, 0, 20, 0.92)),
-    radial-gradient(circle at 12% 6%, rgba(168, 85, 247, 0.28), transparent 32%),
-    radial-gradient(circle at 86% 14%, rgba(124, 58, 237, 0.26), transparent 34%),
+    linear-gradient(135deg, rgba(5, 0, 20, 0.66), rgba(46, 16, 101, 0.42) 42%, rgba(5, 0, 20, 0.72)),
+    radial-gradient(circle at 12% 6%, rgba(168, 85, 247, 0.18), transparent 32%),
+    radial-gradient(circle at 86% 14%, rgba(124, 58, 237, 0.16), transparent 34%),
     radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.035), transparent 44%),
-    linear-gradient(135deg, rgba(5, 0, 20, 0.72), rgba(8, 0, 31, 0.76) 48%, rgba(5, 0, 20, 0.86)),
+    linear-gradient(135deg, rgba(5, 0, 20, 0.34), rgba(8, 0, 31, 0.44) 48%, rgba(5, 0, 20, 0.58)),
     url('../assets/Background.png');
   background-position:
     center,
